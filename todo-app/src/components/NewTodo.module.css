@@ -1,0 +1,26 @@
+.Root {
+  display: flex;
+}
+
+.Input {
+  padding: 8px 12px;
+
+  font: inherit;
+
+  border: none;
+  border-right: thin solid black;
+  background: transparent;
+  outline: none;
+}
+
+.Input::placeholder {
+  color: #949494;
+  font-weight: bold;
+}
+
+.Button {
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}

@@ -1,0 +1,11 @@
+.Root {
+  border: thin solid black;
+  border-radius: 8px;
+  background-color: #e2e0e0;
+
+  overflow: hidden;
+}
+
+.Root > :not(:last-child) {
+  border-bottom: inherit;
+}
