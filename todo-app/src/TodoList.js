@@ -15,9 +15,9 @@ class TodoList extends React.Component {
 
   componentDidMount = async () => {
     const response = await fetch(`${API}/todos`)
-    const data = await response.json()
+    const todos = await response.json()
 
-    this.setState({ todos: data })
+    this.setState({ todos })
   }
 
   handleChange = e => {
@@ -29,17 +29,22 @@ class TodoList extends React.Component {
   handleAdd = async () => {
     if (!this.state.textValue) return
 
-    const todo = { ticked: false, name: this.state.textValue }
+    // ส่งข้อมูลไปยัง server
+    const todo = { name: this.state.textValue, ticked: false }
     await fetch(`${API}/todos`, {
-      headers: { 'Content-Type': 'application/json' },
       method: 'POST',
+      headers: { 'content-type': 'application/json' },
       body: JSON.stringify(todo)
     })
 
-    this.setState(state => ({
-      todos: state.todos.concat(todo),
+    const response = await fetch(`${API}/todos`)
+    const todos = await response.json()
+
+    // set todos and textValue at the same time
+    this.setState({
+      todos,
       textValue: ''
-    }))
+    })
   }
 
   handleTick = id => async () => {
@@ -47,25 +52,27 @@ class TodoList extends React.Component {
     tickedTodo.ticked = !tickedTodo.ticked
 
     await fetch(`${API}/todos/${id}`, {
-      headers: { 'Content-Type': 'application/json' },
       method: 'PUT',
+      headers: { 'content-type': 'application/json' },
       body: JSON.stringify(tickedTodo)
     })
 
-    this.setState(state => ({
-      todos: state.todos.map(todo => (todo.id === id ? tickedTodo : todo))
-    }))
+    const response = await fetch(`${API}/todos`)
+    const todos = await response.json()
+
+    this.setState({ todos })
   }
 
   handleDelete = id => async () => {
     await fetch(`${API}/todos/${id}`, {
-      headers: { 'Content-Type': 'application/json' },
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { 'content-type': 'application/json' }
     })
 
-    this.setState(state => ({
-      todos: state.todos.filter(todo => todo.id !== id)
-    }))
+    const response = await fetch(`${API}/todos`)
+    const todos = await response.json()
+
+    this.setState({ todos })
   }
 
   render = () => {
